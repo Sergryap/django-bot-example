@@ -34,11 +34,14 @@ class DrawFilter(admin.SimpleListFilter):
     parameter_name = 'draw'
 
     def lookups(self, request, model_admin):
-        return [
-            ['current', 'Текущие'],
-            ['future', 'Будущие'],
-            ['past', 'Прошедшие'],
+        qs = model_admin.get_queryset(request)
+        lookups_options = [
+            (['current', 'Текущие'], qs.get_current_draw()),
+            (['future', 'Будущие'], qs.filter(start_at__gte=now())),
+            (['past', 'Прошедшие'], qs.filter(end_at__lte=now()))
         ]
+
+        return [lookup for lookup, verify in lookups_options if verify]
 
     def queryset(self, request, queryset):
         time = now()
@@ -112,6 +115,7 @@ class DrawAdmin(admin.ModelAdmin):
     form = DrawForm
     ordering = ['-end_at']
     search_fields = ['title']
+    list_filter = [DrawFilter]
     list_display = ['title',
                     'get_download_link',
                     'get_amount_users',
