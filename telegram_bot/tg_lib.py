@@ -14,6 +14,7 @@ from telegram import (
 from django.utils.timezone import now
 
 from .models import Draw, Rebus
+from django.conf import settings
 
 
 TYPE_COMPETITION = {'is_rebus': 'РЕБУС', 'is_poll': 'ОПРОС'}
@@ -74,7 +75,8 @@ def show_rebus(bot, chat_id, current_rebus, description=''):
     )
 
     # if requests.get(current_rebus.image.url).ok:
-    if current_rebus.image.url[:4].lower() == 'http':
+    # if current_rebus.image.url[:4].lower() == 'http':
+    if not settings.DEBUG:
         # for production server
         bot.send_photo(
             chat_id=chat_id, photo=current_rebus.image.url, reply_markup=reply_markup,
