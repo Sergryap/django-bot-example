@@ -78,14 +78,14 @@ def show_rebus(bot, chat_id, current_rebus, description=''):
         # for production server
         bot.send_photo(
             chat_id=chat_id, photo=current_rebus.image.url, reply_markup=reply_markup,
-            caption=' '.join([item for item in (current_rebus.text, description) if item])
+            caption='\n'.join([item for item in (current_rebus.text, description) if item])
         )
     else:
         # for localhost
         with open(current_rebus.image.path, 'rb') as image:
             bot.send_photo(
                 chat_id=chat_id, photo=image, reply_markup=reply_markup,
-                caption=' '.join([item for item in (current_rebus.text, description) if item])
+                caption='\n'.join([item for item in (current_rebus.text, description) if item])
             )
 
 
