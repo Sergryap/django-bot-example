@@ -23,8 +23,8 @@ def check_answer(chat_id, answer, context):
     rebus = Rebus.objects.get(pk=context.user_data['current_rebus'].id)
     answers = rebus.answers.all()
     regex_object = re.compile(r'[\n+|\r|\(|\)|\.|\,|\:|\;|\"|\[|\]|\s]')
-    answer_seq = [word for word in regex_object.split(answer.upper()) if len(word) > 2]
-    correct_answer_seq = [word for word in [item.answer.upper() for item in answers] if len(word) > 2]
+    answer_seq = [word for word in regex_object.split(answer.upper()) if len(word) >= 2]
+    correct_answer_seq = [word for word in [item.answer.upper() for item in answers] if len(word) >= 2]
     return len(answer_seq) == len(set(answer_seq) & set(correct_answer_seq)) and len(answer_seq) > 0
 
 
@@ -73,7 +73,8 @@ def show_rebus(bot, chat_id, current_rebus, description=''):
         one_time_keyboard=False, row_width=1, resize_keyboard=True
     )
 
-    if requests.get(current_rebus.image.url).ok:
+    # if requests.get(current_rebus.image.url).ok:
+    if current_rebus.image.url[:4].lower() == 'http':
         # for production server
         bot.send_photo(
             chat_id=chat_id, photo=current_rebus.image.url, reply_markup=reply_markup,

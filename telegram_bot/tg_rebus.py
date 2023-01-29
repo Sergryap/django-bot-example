@@ -226,6 +226,7 @@ def handle_end_competition(bot, chat_id, context):
 
 
 def handle_rebus(bot, update, context):
+    print('test')
     user_data = context.user_data
     if not update.message or not update.message.text:
         return 'HANDLE_REBUS'
