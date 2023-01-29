@@ -72,11 +72,11 @@ def show_rebus(bot, chat_id, current_rebus, description=''):
         [['❓ Получить подсказку'], ['✖ Закончить игру']],
         one_time_keyboard=False, row_width=1, resize_keyboard=True
     )
-    
+
     if requests.get(current_rebus.image.url).ok:
         # for production server
         bot.send_photo(
-            chat_id=chat_id, photo=image.url, reply_markup=reply_markup,
+            chat_id=chat_id, photo=current_rebus.image.url, reply_markup=reply_markup,
             caption=' '.join([item for item in (current_rebus.text, description) if item])
         )
     else:
@@ -186,7 +186,7 @@ def show_next_question(bot, chat_id, question_number, context):
     answer_options = message['answer options']
     poll_options = message['poll options']
     reply_markup = ReplyKeyboardMarkup(
-        [['✖ Завершить опрос']],
+        [['✖ Завершить опрос', 'Следующий']],
         one_time_keyboard=False, row_width=1,
         resize_keyboard=True
     )
